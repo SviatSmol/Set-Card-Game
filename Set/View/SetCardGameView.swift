@@ -28,6 +28,7 @@ struct SetCardGameView: View {
         
     }
     //kjk
+    //ree
     
     
     private func startNewGame() {
