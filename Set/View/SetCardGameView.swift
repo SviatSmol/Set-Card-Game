@@ -9,9 +9,8 @@ import SwiftUI
 
 struct SetCardGameView: View {
     @ObservedObject var viewModel = SetCardGame()
-    @Namespace private var dealingToMainPlayZone
-    @Namespace private var discardedCardsSpace
-    @Namespace private var updatedForNewGameCardsSpace
+    @Namespace private var animatingDealCards
+    @State var shouldDelay = true
     
     var body: some View {
                 VStack {
@@ -27,19 +26,11 @@ struct SetCardGameView: View {
         .background(Color.blue.edgesIgnoringSafeArea(.all).opacity(0.3))
         
     }
-    //kjk
-    //ree
-    
-    
-    private func startNewGame() {
-        viewModel.newGame()
-//            viewModel.deal()
-    }
     
     var buttonNewGame: some View {
         Button ("New Game"){
-            withAnimation(.easeInOut(duration: 2)){
-                startNewGame()
+            withAnimation(.easeInOut(duration: 4)){
+                viewModel.newGame()
             }
         }
             .padding(.horizontal)
@@ -50,37 +41,6 @@ struct SetCardGameView: View {
     private func zIndex(of card: SetCardGame.Card)-> Double {
         -Double(viewModel.deck.firstIndex(where: { $0.id == card.id }) ?? 0)
     }
-    
-    
-    private func dealAnimation(for card: SetCardGame.Card)-> Animation {
-        var delay = 0.0
-        if let index = viewModel.cards.firstIndex(where: { $0.id == card.id }) {
-            delay = Double(index) * (Double(2) / Double(viewModel.cards.count))
-        }
-        return Animation.easeInOut(duration: 3).delay(delay)
-    }
-    
-    
-    
-    
-    var mainPlayZone: some View {
-        Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
-        CardView(card: card, setting: $viewModel.setting)
-                .matchedGeometryEffect(id: card.id, in: dealingToMainPlayZone)
-                .matchedGeometryEffect(id: card.id, in: discardedCardsSpace)
-//                .transition(AnyTransition.asymmetric(insertion: .identity, removal: .opacity))
-                .zIndex(zIndex(of: card))
-                .padding(3)
-                .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.5)){
-                    viewModel.choose(card: card)
-                    }
-            }
-        }
-    }
-    
-    
-   
     
     private func offsetXOfCard(for card: SetCardGame.Card)-> CGFloat {
         var x: CGFloat = 0
@@ -99,32 +59,46 @@ struct SetCardGameView: View {
         return y
     }
     
-    @State private var dealt = Set<Int>()
+    private var cardTransitionDelay: Double = 2
     
-    private func deal(_ card: SetCardGame.Card) {
-        dealt.insert(card.id)
-    }
-    
-    private func isUndealt(_ card: SetCardGame.Card)-> Bool {
-        !dealt.contains(card.id)
+    private func transitionDelay(card: SetCardGame.Card)-> Double {
+        guard shouldDelay else { return 0 }
+        return Double(viewModel.deck.firstIndex(where: { $0.id == card.id} )!) * cardTransitionDelay
     }
     
     
+    var mainPlayZone: some View {
+        Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
+        CardView(card: card, setting: $viewModel.setting)
+                .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                .matchedGeometryEffect(id: card.id, in: animatingDealCards)
+                .zIndex(zIndex(of: card))
+                .padding(3)
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 1)){
+                    viewModel.choose(card: card)
+                    }
+            }
+        }
+    }
     
-var deck: some View {
     
+    var deck: some View {
         VStack {
             ZStack{
-                ForEach(viewModel.deck.filter(isUndealt)) { card in
+                ForEach(viewModel.deck) { card in
             CardView(card: card, setting: $viewModel.setting)
-                        .matchedGeometryEffect(id: card.id, in: dealingToMainPlayZone)
-                        .matchedGeometryEffect(id: card.id, in: updatedForNewGameCardsSpace)
-                        .zIndex(zIndex(of: card))
-                        .offset(x: offsetXOfCard(for: card), y: offsetYOfCard(for: card))
-                        .onTapGesture {
-                                withAnimation(dealAnimation(for: card)) {
-                                        viewModel.deal()
+                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                    .matchedGeometryEffect(id: card.id, in: animatingDealCards)
+                    .zIndex(zIndex(of: card))
+                    .offset(x: offsetXOfCard(for: card), y: offsetYOfCard(for: card))
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 1).delay(transitionDelay(card: card))) {
+                                    viewModel.deal()
+                                DispatchQueue.main.async {
+                                    shouldDelay = false
                                 }
+                            }
                         }
                     }
                     .padding(3)
@@ -153,8 +127,7 @@ var deck: some View {
             ZStack{
                 ForEach(viewModel.basket) { card in
             CardView(card: card, setting: $viewModel.setting)
-                        .matchedGeometryEffect(id: card.id, in: discardedCardsSpace)
-                        .matchedGeometryEffect(id: card.id, in: updatedForNewGameCardsSpace)
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .opacity))
 
             }
             .padding(3)
@@ -215,7 +188,7 @@ struct CardView: View {
 
 struct SetCardGrid_Previews: PreviewProvider {
     static var previews: some View {
-        SetCardGameView(viewModel: SetCardGame())
+        SetCardGameView()
             .previewInterfaceOrientation(.portrait)
     }
 }
