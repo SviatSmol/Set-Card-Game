@@ -27,7 +27,7 @@ struct SetCardGameView: View {
         .background(Color.blue.edgesIgnoringSafeArea(.all).opacity(0.3))
         
     }
-    
+    //kjk
     
     
     private func startNewGame() {
