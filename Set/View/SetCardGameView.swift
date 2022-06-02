@@ -57,11 +57,27 @@ struct SetCardGameView: View {
         return y
     }
 
+//    private func transitionDelay(card: SetCardGame.Card)-> Double {
+//        var delay = 0.0
+//        delay = Double(viewModel.cards.firstIndex(where: { $0.id == card.id} )!) * 0.2
+//        return delay
+//    }
+//
+
+    //нельзя делать делай в зависимости от индекса
+    //нужно делать делай в зависимости от количества сдаваемых карт
+    
     private func transitionDelay(card: SetCardGame.Card)-> Double {
         var delay = 0.0
-        delay += Double(viewModel.cards.firstIndex(where: { $0.id == card.id} )!) * 0.2
+        if viewModel.deck.count == 81 {
+            delay = 0.0
+        }else{
+            delay = Double(viewModel.cards.firstIndex(where: { $0.id == card.id} )!) * 0.2
+        }
         return delay
     }
+    
+    
     
 //    private func transitionDelay(card: SetCardGame.Card)-> Double {
 //        var delay = 0.0
