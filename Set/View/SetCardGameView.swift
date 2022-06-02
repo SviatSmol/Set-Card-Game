@@ -10,7 +10,6 @@ import SwiftUI
 struct SetCardGameView: View {
     @ObservedObject var viewModel = SetCardGame()
     @Namespace private var animatingDealCards
-    @State var shouldDelay = true
     
     var body: some View {
                 VStack {
@@ -18,7 +17,7 @@ struct SetCardGameView: View {
                     mainPlayZone
                     HStack(alignment: .top){
                             deck
-                            Spacer()
+//                            Spacer()
                             sets
                         }
                 }
@@ -53,31 +52,38 @@ struct SetCardGameView: View {
     private func offsetYOfCard(for card: SetCardGame.Card)-> CGFloat {
         var y: CGFloat = 0
         if let index = viewModel.deck.firstIndex(where: { $0.id == card.id }) {
-//            y = -1 / 2 * CGFloat(index * 1)
             y = 0
         }
         return y
     }
-    
-    private var cardTransitionDelay: Double = 2
-    
+
     private func transitionDelay(card: SetCardGame.Card)-> Double {
-        guard shouldDelay else { return 0 }
-        return Double(viewModel.deck.firstIndex(where: { $0.id == card.id} )!) * cardTransitionDelay
+        var delay = 0.0
+        delay += Double(viewModel.cards.firstIndex(where: { $0.id == card.id} )!) * 0.2
+        return delay
     }
+    
+//    private func transitionDelay(card: SetCardGame.Card)-> Double {
+//        var delay = 0.0
+//        if let index = viewModel.cards.firstIndex(where: { $0.id == card.id }) {
+//            delay = Double(index) * (0.5 / Double(viewModel.cards.count))
+//        }
+//        return delay
+//    }
     
     
     var mainPlayZone: some View {
         Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
         CardView(card: card, setting: $viewModel.setting)
-                .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                .transition(.asymmetric(
+                    insertion: .identity,
+                    removal: .identity))
                 .matchedGeometryEffect(id: card.id, in: animatingDealCards)
                 .zIndex(zIndex(of: card))
+                .animation(.easeInOut(duration: 2).delay(transitionDelay(card: card)))
                 .padding(3)
                 .onTapGesture {
-                    withAnimation(.easeInOut(duration: 1)){
                     viewModel.choose(card: card)
-                    }
             }
         }
     }
@@ -88,17 +94,15 @@ struct SetCardGameView: View {
             ZStack{
                 ForEach(viewModel.deck) { card in
             CardView(card: card, setting: $viewModel.setting)
-                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                    .transition(.asymmetric(
+                        insertion: .identity,
+                        removal: .identity)
+                    )
                     .matchedGeometryEffect(id: card.id, in: animatingDealCards)
                     .zIndex(zIndex(of: card))
                     .offset(x: offsetXOfCard(for: card), y: offsetYOfCard(for: card))
                     .onTapGesture {
-                        withAnimation(.easeInOut(duration: 1).delay(transitionDelay(card: card))) {
-                                    viewModel.deal()
-                                DispatchQueue.main.async {
-                                    shouldDelay = false
-                                }
-                            }
+                            viewModel.deal()
                         }
                     }
                     .padding(3)
