@@ -36,29 +36,11 @@ class SetCardGame: ObservableObject {
         SetGame(numberOfCardsStart: numberOfCardsStart, numberOfCardsInDeck: deck.cards.count) { index in deck.cards[index] }
     }
     
-    static var numberOfCardsStart = 12
+    static var numberOfCardsStart = 15
     static private var deck = SetCardDeck()
     
     var setting = Setting()
-   
 
-  
-//    var allIds: String {
-//        model.allIdOfChoosedCards().map{ String($0) }.joined(separator: "-")
-//    }
-    
-    
-//    var allFiguresShape: String {
-//        model.allNumbersOfFiguresOnChoosedCardsShape().map{ String($0) }.joined(separator: "-")
-//    }
-//
-//    var allFiguresFill: String {
-//        model.allNumbersOfFiguresOnChoosedCardsFill().map{ String($0) }.joined(separator: "-")
-//    }
-//    
-//    var allFiguresColor: String {
-//        model.allNumbersOfFiguresOnChoosedCardsColor().map{ String($0) }.joined(separator: "-")
-//    }
     
     
     // MARK: access to model
@@ -67,22 +49,9 @@ class SetCardGame: ObservableObject {
         model.cards
     }
     
-    var basket: Array<Card> {
-        model.basket
-    }
-    
     var deck : Array<Card> {
         model.deck
     }
-    
-    var leftNumberOfDealing: Int {
-        (model.totalNumberOfDealThreeCards - model.numberOfDealing) / 3
-    }
-
-    
-//    var allFiguresNumber: String {
-//        model.allNumbersOfFiguresOnChoosedCardsNumber().map{ String($0) }.joined(separator: "-")
-//    }
     
     
     // MARK: intents

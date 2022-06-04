@@ -9,7 +9,6 @@ import Foundation
 
 protocol Matchable {
     static func match(cards: [Self])-> Bool
-//    static func arrayOfContentsOfCardsNumber(cards: [Self])-> [Int]
 }
 
 
@@ -18,17 +17,12 @@ struct SetGame<CardContent> where CardContent: Matchable {
     
     private (set) var cards = [Card]()
     private (set) var deck = [Card]()
-    private (set) var basket = [Card]()
 
     
     let numberOfCardsToMatch = 3
-    var numberOfCardsStart = 12
+    var numberOfCardsStart: Int
     
     private var selectedIndices: [Int] {cards.indices.filter {cards[$0].isSelected}}
-    
-//    func allNumbersOfFiguresOnChoosedCardsNumber()-> [Int] {
-//        return CardContent.arrayOfContentsOfCardsNumber(cards: selectedIndices.map {cards[$0].content})
-//   }
     
     mutating func choose(card: Card) {
         if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}),
@@ -83,14 +77,10 @@ struct SetGame<CardContent> where CardContent: Matchable {
         if deck.count >= numberOfCardsToMatch && cards.count == numberOfCardsStart{
             //---------replace matched cards---------
             for index in replaceIndices{
-                basket.append(cards.remove(at: index))
                 cards.insert(deck.remove(at: 0), at: index)
             }
         } else {
             //--------remove matched cards----------
-            basket.append(contentsOf: cards.enumerated()
-                .filter { replaceIndices.contains($0.offset) }
-                .map { $0.element })
             cards = cards.enumerated()
                 .filter { !replaceIndices.contains($0.offset) }
                 .map { $0.element }
@@ -110,47 +100,13 @@ struct SetGame<CardContent> where CardContent: Matchable {
         }
         deck.shuffle()
     }
-    
+
 
     
-//     func allIdOfChoosedCards()-> [Int] {
-//        if selectedIndices.count > 0{
-//            var allIdOfSelectedCards: [Int] = []
-//            let choosedIndices = selectedIndices
-//            for i in choosedIndices {
-//                allIdOfSelectedCards.append(cards[i].id)
-//            }
-//            return allIdOfSelectedCards
-//        } else {
-//            return [0]
-//        }
-//    }
-    
-    var numberOfDealing = 0
-    let totalNumberOfDealThreeCards = 15
-    
-//    mutating func deal3() {
-//        if numberOfDealing < totalNumberOfDealThreeCards {
-////            for _ in 0..<3 {
-//                cards.append(deck.remove(at: 0))
-////            }
-//            numberOfDealing += 1
-//        }
-//    }
-    
     mutating func deal(_ numberOfCards: Int? = nil ) {
-        if cards.count == 0 {
       let n = numberOfCards  ?? numberOfCardsStart
         for _ in 0..<n {
             cards.append(deck.remove(at: 0))
-        }
-        } else {
-            for _ in 0..<3 {
-            if numberOfDealing < totalNumberOfDealThreeCards {
-                            cards.append(deck.remove(at: 0))
-                        numberOfDealing += 1
-                    }
-            }
         }
     }
     
