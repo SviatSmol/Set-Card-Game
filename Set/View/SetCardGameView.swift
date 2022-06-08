@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SetCardGameView: View {
     @ObservedObject var viewModel = SetCardGame()
+    @State var shouldDelay = true
     
     var body: some View {
                 VStack {
@@ -21,16 +22,32 @@ struct SetCardGameView: View {
 
     
     var mainPlayZone: some View {
-        Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
-        CardView(card: card, setting: $viewModel.setting)
-                .padding(3)
-                .onTapGesture { viewModel.choose(card: card) }
+        GeometryReader { geometry in
+            Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
+            CardView(card: card, setting: $viewModel.setting)
+                    .transition(.cardTransition(size: geometry.size))
+                    .animation(.easeInOut(duration: 1.00)
+                    .delay(transitionDelay(card: card)))
+                    .padding(3)
+                    .onTapGesture {
+                            viewModel.choose(card: card)
+                    }
+            }
+            .onAppear { deal() }
         }
-        .onAppear { viewModel.deal() }
+    }
+    private func transitionDelay(card: SetCardGame.Card)-> Double {
+        guard shouldDelay else { return 0 }
+        return Double(viewModel.cards.firstIndex(where: {$0.id == card.id})!) * 0.2
+    }
+    
+    private func deal() {
+        viewModel.deal()
+        DispatchQueue.main.async {
+            shouldDelay = false
+    }
     }
 }
-
-
 
 
 struct CardView: View {
