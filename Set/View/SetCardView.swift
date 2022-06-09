@@ -42,6 +42,7 @@ struct SetCardView: View {
             case .diamond: shapeFill(shape: Diamond())
             case .squiggle: shapeFill(shape: Squiggle())
             case .stadium: shapeFill(shape: Stadium())
+            case .drop: shapeFill(shape: Drop())
             }
         }
     }

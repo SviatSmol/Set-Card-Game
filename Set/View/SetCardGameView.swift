@@ -76,14 +76,12 @@ struct GameView: View {
 
 struct CardView: View {
     var card: SetGame<SetCard>.Card
-    var colorOfBorder: [Color] = [.blue, .red, .yellow]
-    var colorHint: Color = .red
     @Binding var setting: Setting
     
     var body: some View {
         if card.isSelected || !card.isMatched {
             SetCardView(card: card.content, setting: setting)
-                .background(card.isHint ? colorHint.opacity(0.05) : Color.white)
+                .background(card.isHint ? setting.colorHint.opacity(0.05) : Color.white)
                 .cornerRadius(cornerRadius)
                 .overlay(
                     ZStack{
@@ -103,11 +101,11 @@ struct CardView: View {
         var color = Color.gray.opacity(0.3)
         if card.isSelected {
             if card.isMatched{
-            color = colorOfBorder[0]
+                color = setting.colorOfBorder[0]
         } else if card.isNotMatched {
-            color = colorOfBorder[1]
+            color = setting.colorOfBorder[1]
         } else {
-            color = colorOfBorder[2]
+            color = setting.colorOfBorder[2]
         }
         }
         return color

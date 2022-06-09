@@ -23,6 +23,7 @@
 		A1EF4617281AE6AD0011DE77 /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EF4615281AE6AD0011DE77 /* Squiggle.swift */; };
 		A1EF461A281AE6B90011DE77 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EF4618281AE6B90011DE77 /* Diamond.swift */; };
 		A1EF461B281AE6B90011DE77 /* FillsOfFigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EF4619281AE6B90011DE77 /* FillsOfFigure.swift */; };
+		A1EF8C4C2852851200DBA0A2 /* Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EF8C4B2852851200DBA0A2 /* Drop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		A1EF4615281AE6AD0011DE77 /* Squiggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
 		A1EF4618281AE6B90011DE77 /* Diamond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
 		A1EF4619281AE6B90011DE77 /* FillsOfFigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillsOfFigure.swift; sourceTree = "<group>"; };
+		A1EF8C4B2852851200DBA0A2 /* Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				A1EF4618281AE6B90011DE77 /* Diamond.swift */,
 				A1EF4615281AE6AD0011DE77 /* Squiggle.swift */,
 				A1EF4614281AE6AD0011DE77 /* Stadium.swift */,
+				A1EF8C4B2852851200DBA0A2 /* Drop.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				A1409E6C28133F2200452A61 /* SetCardView.swift in Sources */,
 				A1EF461A281AE6B90011DE77 /* Diamond.swift in Sources */,
 				A121B011282E771500CD8F7B /* Cardify.swift in Sources */,
+				A1EF8C4C2852851200DBA0A2 /* Drop.swift in Sources */,
 				A162C74628510EB2001B7CFC /* Transition+Extension.swift in Sources */,
 				A1409E6A28133F2200452A61 /* SetApp.swift in Sources */,
 				A18D3A39281C2EA60027F914 /* SetCardGameView.swift in Sources */,

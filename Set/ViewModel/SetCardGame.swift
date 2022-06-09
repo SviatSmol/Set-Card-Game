@@ -18,12 +18,16 @@ enum ShapeInSet: Int, CaseIterable {
     case diamond = 1
     case squiggle
     case stadium
+    case drop
 }
 
 struct Setting {
     var colorShapes = [Color.green, Color.red, Color.purple]
     var fillShapes = [FillInSet.stroke, .fill, .stripe]
-    var shapes = [ShapeInSet.diamond, .squiggle, .stadium]
+    //possible: .diamond, .squiggle, .stadium, .drop
+    var shapes = [ShapeInSet.diamond, .drop, .stadium]
+    var colorHint: Color = .red
+    var colorOfBorder: [Color] = [.blue, .red, .yellow]
 }
 
 class SetCardGame: ObservableObject {
