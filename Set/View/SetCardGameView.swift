@@ -8,57 +8,82 @@
 import SwiftUI
 
 struct SetCardGameView: View {
-    @ObservedObject var viewModel = SetCardGame()
+    @StateObject var viewModel = SetCardGame()
     @State var shouldDelay = true
-    
+
     var body: some View {
                 VStack {
-                    mainPlayZone
+                    GameView(viewModel: viewModel, shouldDelay: $shouldDelay).onAppear { deal() }
+                    HStack(spacing: 50) {
+//                        Text("Deck:\( viewModel.deck.count )")
+                        Button(viewModel.numberHint){ viewModel.hint() }
+                        Button("Deal+3"){ deal3() }.disabled(viewModel.cards.count == 0)
+                        Button("New Game"){ newGame() }
+                    }
                 }
                 .padding()
                 .background(Color.blue.edgesIgnoringSafeArea(.all).opacity(0.3))
         
     }
-
     
-    var mainPlayZone: some View {
-        GeometryReader { geometry in
-            Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
-            CardView(card: card, setting: $viewModel.setting)
-                    .transition(.cardTransition(size: geometry.size))
-                    .animation(.easeInOut(duration: 1.00)
-                    .delay(transitionDelay(card: card)))
-                    .padding(3)
-                    .onTapGesture {
-                            viewModel.choose(card: card)
-                    }
-            }
-            .onAppear { deal() }
-        }
-    }
-    private func transitionDelay(card: SetCardGame.Card)-> Double {
-        guard shouldDelay else { return 0 }
-        return Double(viewModel.cards.firstIndex(where: {$0.id == card.id})!) * 0.2
-    }
     
     private func deal() {
         viewModel.deal()
         DispatchQueue.main.async {
             shouldDelay = false
+        }
     }
+    
+    private func deal3() {
+        shouldDelay = true
+        viewModel.deal3()
+        DispatchQueue.main.async {
+            shouldDelay = false
+        }
+    }
+    
+    private func newGame() {
+        viewModel.resetGame()
+        shouldDelay = true
+        deal()
     }
 }
 
 
+struct GameView: View {
+    @ObservedObject var viewModel: SetCardGame
+    @Binding var shouldDelay: Bool
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Grid(items: viewModel.cards, aspectRatio: 3/2){ card in
+                CardView(card: card, setting: $viewModel.setting)
+                    .transition(.cardTransition(size: geometry.size))
+                    .animation(.easeInOut(duration: 1.00).delay(transitionDelay(card: card)))
+                    .padding(3)
+                    .onTapGesture {
+                        viewModel.choose(card: card)
+                }
+            }
+        }
+    }
+    
+    private func transitionDelay(card: SetCardGame.Card)-> Double {
+        guard shouldDelay else { return 0 }
+        return Double(viewModel.cards.firstIndex(where: {$0.id == card.id})!) * 0.15
+    }
+}
+
 struct CardView: View {
     var card: SetGame<SetCard>.Card
     var colorOfBorder: [Color] = [.blue, .red, .yellow]
+    var colorHint: Color = .red
     @Binding var setting: Setting
     
     var body: some View {
         if card.isSelected || !card.isMatched {
             SetCardView(card: card.content, setting: setting)
-                .background(Color.white)
+                .background(card.isHint ? colorHint.opacity(0.05) : Color.white)
                 .cornerRadius(cornerRadius)
                 .overlay(
                     ZStack{

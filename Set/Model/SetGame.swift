@@ -21,6 +21,7 @@ struct SetGame<CardContent> where CardContent: Matchable {
     
     let numberOfCardsToMatch = 3
     var numberOfCardsStart: Int
+    var numberHint = 0
     
     private var selectedIndices: [Int] {cards.indices.filter {cards[$0].isSelected}}
     
@@ -68,11 +69,12 @@ struct SetGame<CardContent> where CardContent: Matchable {
         }
     }
     
-    private var matchedIndices: [Int] { cards.indices.filter {cards[$0].isSelected && cards[$0].isMatched }}
+    var matchedIndices: [Int] { cards.indices.filter {cards[$0].isSelected && cards[$0].isMatched }}
    
     
-    private mutating func changeCards() {
+    mutating func changeCards() {
         guard matchedIndices.count == numberOfCardsToMatch else { return }
+        numberHint = 0
         let replaceIndices = matchedIndices
         if deck.count >= numberOfCardsToMatch && cards.count == numberOfCardsStart{
             //---------replace matched cards---------
@@ -110,6 +112,42 @@ struct SetGame<CardContent> where CardContent: Matchable {
         }
     }
     
+    var hints: [[Int]] {
+        var hints = [[Int]]()
+        
+        if cards.count > 2 {
+            for i in 0..<cards.count - 2 {
+                for j in (i+1)..<cards.count - 1 {
+                    for k in (j+2)..<cards.count {
+                        let checkList = [cards[i], cards[j], cards[k]]
+                        if CardContent.match(cards: checkList.map { $0.content }) {
+                            hints.append([i, j, k])
+                        }
+                    }
+                }
+            }
+        }
+        return hints
+    }
+    
+    
+    mutating func hint() {
+        if hints.count > 0 && numberHint < hints.count {
+            for index in hints[numberHint]{
+                cards[index].isHint = true
+            }
+            numberHint += 1
+            numberHint = numberHint < hints.count ? numberHint : 0
+        }
+    }
+    
+    mutating func deHint() {
+        if hints.count > 0 {
+            for index in 0..<cards.count {
+                cards[index].isHint = false
+            }
+        }
+    }
     
     
     struct Card: Identifiable {
@@ -118,6 +156,7 @@ struct SetGame<CardContent> where CardContent: Matchable {
         var isNotMatched: Bool = false
         var content: CardContent
         var id: Int
+        var isHint: Bool = false
     }
     
 }

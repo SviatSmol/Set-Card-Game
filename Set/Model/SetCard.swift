@@ -25,20 +25,7 @@ struct SetCard: CustomStringConvertible, Matchable {
         
         var description: String { return String(self.rawValue)}
     }
-    
- 
-//    static func arrayOfContentsOfCardsNumber(cards: [SetCard])-> [Int] {
-//        var arrayOfChoosedCards: [Int] = []
-//        if cards.count == 1 || cards.count == 2 || cards.count == 3{
-//            for index in 0..<cards.count{
-//                arrayOfChoosedCards.append(cards[index].number.rawValue)
-//            }
-//            return arrayOfChoosedCards
-//        } else {
-//            return [0, 0, 0]
-//        }
-//
-//    }
+
 
     
     static func match(cards: [SetCard]) -> Bool {

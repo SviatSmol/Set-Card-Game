@@ -53,6 +53,10 @@ class SetCardGame: ObservableObject {
         model.deck
     }
     
+    var numberHint: String {
+        "Hints: \(model.hints.count) / \(model.numberHint + 1)"
+    }
+    
     
     // MARK: intents
     
@@ -64,12 +68,23 @@ class SetCardGame: ObservableObject {
         model.deal()
     }
     
-//    func deal3() {
-//        model.deal3()
-//    }
+    func deal3() {
+        if model.matchedIndices.count == 3 {
+            model.changeCards()
+        }else{
+            model.deal(3)
+        }
+    }
     
-    func newGame () {
+    func resetGame () {
         model = SetCardGame.createSetGame()
+    }
+    
+    func hint() {
+        model.hint()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.model.deHint()
+        }
     }
     
    
