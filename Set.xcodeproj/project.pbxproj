@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A121B011282E771500CD8F7B /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = A121B010282E771300CD8F7B /* Cardify.swift */; };
 		A13C555E28199B18008B7A17 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13C555D28199B18008B7A17 /* SetGame.swift */; };
 		A13C5560281AD649008B7A17 /* SetCardGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13C555F281AD649008B7A17 /* SetCardGame.swift */; };
 		A1409E6A28133F2200452A61 /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1409E6928133F2200452A61 /* SetApp.swift */; };
@@ -27,7 +26,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A121B010282E771300CD8F7B /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		A13C555D28199B18008B7A17 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		A13C555F281AD649008B7A17 /* SetCardGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardGame.swift; sourceTree = "<group>"; };
 		A1409E6628133F2200452A61 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,7 +120,6 @@
 				A18D3A38281C2EA60027F914 /* SetCardGameView.swift */,
 				A162C74528510EB1001B7CFC /* Transition+Extension.swift */,
 				A1409E6B28133F2200452A61 /* SetCardView.swift */,
-				A121B010282E771300CD8F7B /* Cardify.swift */,
 				A18D3A3A281C3C7E0027F914 /* Grids */,
 				A1EF461C281AEB760011DE77 /* Shapes */,
 			);
@@ -231,7 +228,6 @@
 				A187205E28188171003085D5 /* SetCardDeck.swift in Sources */,
 				A1409E6C28133F2200452A61 /* SetCardView.swift in Sources */,
 				A1EF461A281AE6B90011DE77 /* Diamond.swift in Sources */,
-				A121B011282E771500CD8F7B /* Cardify.swift in Sources */,
 				A1EF8C4C2852851200DBA0A2 /* Drop.swift in Sources */,
 				A162C74628510EB2001B7CFC /* Transition+Extension.swift in Sources */,
 				A1409E6A28133F2200452A61 /* SetApp.swift in Sources */,

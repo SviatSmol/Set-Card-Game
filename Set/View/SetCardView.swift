@@ -83,7 +83,7 @@ struct SetCardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        SetCardView(card: SetCard (number:.v1, color: .v3, shape: .v1, fill: .v3), setting: Setting())
+        SetCardView(card: SetCard (number:.v1, color: .v2, shape: .v2, fill: .v2), setting: Setting())
         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.blue, lineWidth: 3))
         .padding()
     }

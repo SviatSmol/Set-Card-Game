@@ -15,7 +15,6 @@ struct SetCardGameView: View {
                 VStack {
                     GameView(viewModel: viewModel, shouldDelay: $shouldDelay).onAppear { deal() }
                     HStack(spacing: 50) {
-//                        Text("Deck:\( viewModel.deck.count )")
                         Button(viewModel.numberHint){ viewModel.hint() }
                         Button("Deal+3"){ deal3() }.disabled(viewModel.cards.count == 0)
                         Button("New Game"){ newGame() }
